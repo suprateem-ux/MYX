@@ -179,10 +179,10 @@ class Chatter:
         return f'{cpu} {cores}c/{threads}t @ {cpu_freq:.2f}GHz'
     def _get_hint_message(self) -> str:
         if len(self.lichess_game.last_pv) < 1:
-             return 'No hint available yet.'
-         best_move = self.lichess_game.last_pv[0]  
-         move_san = self.lichess_game.board.san(best_move) 
-         return f'Hint: {move_san}'
+            return 'No hint available yet.'
+        best_move = self.lichess_game.last_pv[0]  
+        move_san = self.lichess_game.board.san(best_move) 
+        return f'Hint: {move_san}'
 
     def _get_ram(self) -> str:
         mem_bytes = psutil.virtual_memory().total
