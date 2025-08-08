@@ -125,9 +125,18 @@ class Chatter:
                 await self.api.send_chat_message(self.game_info.id_, chat_message.room, message)
             case 'ram':
                 await self.api.send_chat_message(self.game_info.id_, chat_message.room, self.ram_message)
+            case 'hint':
+                if chat_message.room != 'player':
+                    return
+                if self.game_info.is_rated:
+                    await self.api.send_chat_message(self.game_info.id_, chat_message.room,   
+                                                   'Hints are only available in casual games.')  
+                    return 
+                hint_message = self._get_hint_message()
+                await self.api.send_chat_message(self.game_info.id_, chat_message.room, hint_message)
             case 'assist' | 'commands':
                 if chat_message.room == 'player':
-                    message = 'Supported commands: !cpu, !draw, !eval, !motor, !name, !roast, !designer, !printeval, !ram, !assist'
+                    message = 'Supported commands: !cpu, !draw, !eval, !motor, !name, !roast, !designer, !printeval, !ram, !help'
                 else:
                     message = 'Supported commands: !cpu, !draw, !eval, !motor, !name, !roast, !designer, !printeval, !ram, !assist'
 
@@ -168,6 +177,12 @@ class Chatter:
         cpu_freq = psutil.cpu_freq().max / 1000
 
         return f'{cpu} {cores}c/{threads}t @ {cpu_freq:.2f}GHz'
+    def _get_hint_message(self) -> str:
+        if len(self.lichess_game.last_pv) < 1:
+             return 'No hint available yet.'
+         best_move = self.lichess_game.last_pv[0]  
+         move_san = self.lichess_game.board.san(best_move) 
+         return f'Hint: {move_san}'
 
     def _get_ram(self) -> str:
         mem_bytes = psutil.virtual_memory().total
