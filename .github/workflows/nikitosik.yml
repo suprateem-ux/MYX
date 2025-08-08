@@ -1,0 +1,39 @@
+name: Build NikiBook
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'niki.pgn'
+
+jobs:
+  build-book:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install Polyglot
+        run: |
+          sudo apt update
+          sudo apt install -y polyglot
+
+      - name: Generate nikibook.bin
+        run: |
+          mkdir -p engines
+          polyglot make-book \
+            -pgn niki.pgn \
+            -bin engines/nikibook.bin \
+            -max-ply 200 \
+            -min-game 1
+
+      - name: Commit and Push nikibook.bin
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add engines/nikibook.bin
+          git commit -m "Auto-build: nikibook.bin created from niki.pgn"
+          git push
+
+

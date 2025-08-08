@@ -1,0 +1,287 @@
+token: "TokenTimeIsBackBuddyss"  # Lichess OAuth2 Token.
+
+engines:
+  standard:
+    dir: "./engines"
+    name: "stockfish-ubuntu-x86-64-bmi2"
+    ponder: true
+    silence_stderr: false
+    move_overhead_multiplier: 6.5
+    uci_options:
+      Threads: 4
+      Hash: 4096
+      Move Overhead: 150
+    limits:
+      # time: 20.0
+      # depth: 50
+      # nodes: 8000000
+
+  variants:
+    dir: "./engines"
+    name: "fairy-stockfish_x86-64-bmi2"
+    ponder: false
+    silence_stderr: false
+    move_overhead_multiplier: 22.0
+    uci_options:
+      Threads: 4
+      Hash: 3456
+      Move Overhead: 85
+      Use NNUE: true 
+      EvalFile: "horde-28173ddccabe.nnue:racingkings-636b95f085e3.nnue:crazyhouse-8ebf84784ad2.nnue:kingofthehill-978b86d0e6a4.nnue:antichess-dd3cbe53cd4e.nnue:atomic-2cf13ff256cc.nnue:3check-cb5f517c228b.nnue"
+    limits:
+     # time: 20.0
+      #depth: 50
+    #  nodes: 5000000
+  bullet_human:
+    dir: "./engines"
+    name: "fairy-stockfish_x86-64-bmi2"
+    ponder: false
+    silence_stderr: false
+    move_overhead_multiplier: 10.0
+    uci_options:
+      Threads: 4
+      Hash: 100
+      Move Overhead: 125
+      Use NNUE: true 
+      EvalFile: "nn-46832cfbead3.nnue"
+    limits:
+     # time: 20.0
+      #depth: 50
+    #  nodes: 5000000
+  standard_human:
+    dir: "./engines"
+    name: "fairy-stockfish_x86-64-bmi2"
+    ponder: false
+    silence_stderr: false
+    move_overhead_multiplier: 6.9
+    uci_options:
+      Threads: 4
+      Hash: 269
+      Move Overhead: 125
+      EvalFile: "nn-46832cfbead3.nnue"
+    limits:
+  bullet:
+    dir: "./engines"
+    name: "stockfish-ubuntu-x86-64-bmi2"
+    ponder: true
+    silence_stderr: false
+    move_overhead_multiplier: 14.89643213699986432247999875311367899998653212579985321378865797424
+    uci_options:
+       Threads: 4
+       Hash: 2256
+       Move Overhead: 140
+    limits: 
+  chess960:
+    dir: "./engines"
+    name: "stockfish-ubuntu-x86-64-bmi2"
+    ponder: true
+    silence_stderr: false
+    move_overhead_multiplier: 20.0
+    uci_options:
+       Threads: 4
+       Hash: 4096
+       Move Overhead: 100
+    limits: 
+
+
+syzygy:
+  standard:
+    enabled: true
+    paths:
+      - "./engines/syzygy"
+    max_pieces: 7
+    instant_play: true
+  antichess:
+    enabled: false
+    paths:
+      - "/path/to/antichess/syzygy"
+    max_pieces: 6
+    instant_play: true
+  atomic:
+    enabled: false
+    paths:
+      - "/path/to/atomic/syzygy"
+    max_pieces: 6
+    instant_play: true
+
+gaviota:
+  enabled: false
+  paths:
+    - "/path/to/gaviota"
+  max_pieces: 5
+
+opening_books:
+  enabled: true
+  priority: 400
+  books:
+    standard_white:
+      selection: best_move 
+     # max_depth: 80
+      names:
+      #  - ai 
+        - lilawhite
+        - Perfect2023
+        - Opimus3.1
+        - optimus2502
+       # - optimus4
+      #  - Opimus3.1
+        - noob
+    standard_black:
+      selection: best_move 
+     # max depth : 45 
+      names:
+        - niki
+      #  - optimus4
+      #  - lilablack
+     #   - Titans
+     #   - Opimus3.1
+       # - optimus4
+    standard_human: 
+      selection: best_move 
+      names: 
+        - gm
+        - noob
+        - Titans
+    standard_tournament:
+      selection: best_move
+      names:
+        - niki      
+    
+
+online_moves:
+  opening_explorer:
+    enabled: true
+    priority: 300
+ #   player: Username
+    only_without_book: false
+    use_for_variants: true
+    min_time: 20
+    timeout: 5
+    min_games: 10
+    only_with_wins: true
+    selection: "win_rate"
+    anti: true
+    # max_depth: 20
+
+  lichess_cloud:
+    enabled: true
+    priority: 200
+    only_without_book: true
+    min_eval_depth: 20
+    min_time: 10
+    timeout: 3
+    use_for_variants: false
+    # max_depth: 30
+
+  chessdb:
+    enabled: true
+    priority: 250
+    only_without_book: false
+    min_candidates: 5
+    min_time: 20
+    timeout: 3
+    selection: "optimal"
+    # max_depth: 30
+
+  online_egtb:
+    enabled: true
+    min_time: 20
+    timeout: 3
+
+offer_draw:
+  enabled: true
+  score: 10
+  consecutive_moves: 10
+  min_game_length: 40
+  against_humans: false
+  min_rating: 3000
+
+resign:
+  enabled: false
+  score: -1000
+  consecutive_moves: 6
+  against_humans: false
+  min_rating: 3000
+
+challenge:
+  concurrency: 1
+  bullet_with_increment_only: false
+  max_takebacks: 2
+  min_initial: 60
+  max_initial: 1200
+  variants:
+    - standard
+    - chess960
+    - antichess
+    - atomic
+    - kingOfTheHill
+    - racingKings
+    - threeCheck
+    - fromPosition
+    - crazyhouse
+  time_controls:
+    - bullet
+    - blitz
+    - rapid
+  #  - classical
+  bot_modes:
+   # - casual
+    - rated
+  human_modes:
+    - casual
+   #- rated
+
+matchmaking:
+  delay: 10
+  timeout: 30
+  selection: cyclic
+  types:
+    bullet:
+      tc: 0+1
+      variant: chess960
+    bulle2:
+      tc: 3+0
+    bc:
+      tc: 5+0
+    bm3:
+      tc: 1+0
+    gulugulu:
+      tc: 0+1
+    guliguli:
+      tc: 10+0
+    hvj:
+      tc: 1.5+0
+    win:
+      tc: 8+0
+    loss:
+      tc: 2+0
+    drum:
+      tc: 0.5+0
+      variant: chess960
+
+messages:
+  greeting: "Konnichiwa guzaimase! ❤️‍🔥Using help of {engine} Type !help to glimpse my arsenal. Best of luck"
+  goodbye: "GGs, ezz. May we meet again, may I win again 💶 {me} signing off!"
+  greeting_spectators: "ITZ {engine} in {me} competing for more depth with @{opponent} Type !help for a list of commands."
+  goodbye_spectators: "SIMULATION TERMINATED@{opponent}.May our paths cross again!?Thanks For watching, {me} signing off!"
+
+whitelist:
+  - Supratsa
+  - Shresthmah
+blacklist:
+ # - NimsiluBot
+ # - VEER-OMEGA-BOT
+books:
+  Titans: "./engines/black.bin"
+  optimus2502: "./engines/OPTIMUS2502.bin"
+  optimus4: "./engines/win.bin"
+  Perfect2023: "./engines/white.bin"
+  Opimus3.1: "./engines/Optical.bin"
+  noob: "./engines/Titans.bin"
+  ai: "./engines/nikibook.bin"
+  gm: "./engines/gm2001(1).bin"
+  niki: "./engines/nikimoves.bin"
+  lilawhite: "./engines/lilawhite.bin"
+  lilablack: "./engines/lila.bin"
+  
+
